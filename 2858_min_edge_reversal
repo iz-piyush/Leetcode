@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> minEdgeReversals(int n, vector<vector<int>>& edges) {
+        vector<int> rev(n),depth(n),ans(n);
+        vector<vector<pair<int,int>>> adj(n);
+        for(auto &k:edges){
+            int x=k[0],y=k[1];
+            adj[x].push_back({y,0});
+            adj[y].push_back({x,1});
+        }
+        int reversed=0;
+
+        function<void(int,int)> dfs=[&](int node,int p){
+              for(auto &[x,y]:adj[node]){
+                  if(x==p) continue;
+                  reversed+=y;
+                  depth[x]=depth[node]+1;
+                  rev[x]=rev[node]+y;
+                  dfs(x,node);
+              }
+        };
+        dfs(0,-1);
+        for(int i=0;i<n;i++){
+            ans[i]=(depth[i]-rev[i])+reversed-rev[i];
+        }
+        return ans;
+    }
+};
