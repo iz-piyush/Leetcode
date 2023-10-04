@@ -1,0 +1,26 @@
+#define ll long long
+class Solution {
+public:
+    int maxNumberOfAlloys(int n, int k, int budget, vector<vector<int>>& composition, vector<int>& stock, vector<int>& cost) {
+        ll max_alloy=0;
+        for(auto &cur_machine:composition){
+            ll min_alloys=0,max_alloys=2e8;
+
+            while(min_alloys<=max_alloys){
+                ll cur_alloys=min_alloys+(max_alloys-min_alloys)/2;
+                bool flg=0;
+                ll price_req=0;
+                for(int i=0;i<n;i++){
+                   price_req+=cost[i]*1ll*max(0ll,cur_alloys*1ll*cur_machine[i]-stock[i]);
+                }
+                if(price_req<=budget){
+                    min_alloys=cur_alloys+1;
+                }
+                else max_alloys=cur_alloys-1;
+            }
+
+            max_alloy=max(max_alloy,max_alloys);
+        }
+        return max_alloy;
+    }
+};
